@@ -1,0 +1,495 @@
+:root {
+  --naranja: #FF6B35;
+  --amarillo: #FFB347;
+  --fondo: #fff8f3;
+  --texto: #333;
+  --borde: #ddd;
+  --star-color: #FFD700;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(to right, #FF6B35, #F7931E);
+  color: var(--texto);
+  min-height: 100vh;
+}
+
+header {
+  background-color: var(--naranja);
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  width: 90px;
+  height: 90px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  margin-right: 10px;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  object-fit: cover;
+}
+
+.logo:hover {
+  transform: scale(1.05);
+}
+
+.logo-text {
+  font-weight: 600;
+  font-size: 1.2rem;
+  color: white;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: white;
+}
+
+.user-info a {
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.user-info a:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: rgba(250, 245, 245, 0.95);
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+  color: var(--naranja);
+  margin-bottom: 1rem;
+}
+
+.container > p {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+  color: var(--texto);
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--texto);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid var(--borde);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+  font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--naranja);
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-weight: normal;
+}
+
+.checkbox-label input {
+  width: auto;
+  margin-right: 0.5rem;
+  margin-bottom: 0;
+}
+
+.submit-btn {
+  background-color: var(--naranja);
+  color: white;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+
+.submit-btn:hover {
+  background-color: #e55a2b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.login-required-overlay {
+  background: rgba(250, 245, 245, 0.95);
+  border-radius: 16px;
+  padding: 3rem;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  border: 2px solid var(--borde);
+}
+
+.login-required-content h3 {
+  color: var(--naranja);
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.login-required-content p {
+  margin-bottom: 2rem;
+  color: var(--texto);
+  line-height: 1.6;
+}
+
+.login-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.login-btn {
+  text-decoration: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.login-btn.primary {
+  background-color: var(--naranja);
+  color: white;
+}
+
+.login-btn.primary:hover {
+  background-color: #e55a2b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+}
+
+.login-btn.secondary {
+  background-color: transparent;
+  color: var(--naranja);
+  border: 2px solid var(--naranja);
+}
+
+.login-btn.secondary:hover {
+  background-color: var(--naranja);
+  color: white;
+}
+
+.small-text {
+  font-size: 0.9rem;
+  color: #777;
+  margin-top: 1rem;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.rating-container {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.rating-wrapper {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.rating-title {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--texto);
+}
+
+.rating {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  direction: rtl; /* Necesario para que el :hover funcione de derecha a izquierda */
+}
+
+.rating input {
+  display: none;
+}
+
+.rating label {
+  font-size: 2rem;
+  color: #ddd;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.rating label:hover,
+.rating label:hover ~ label {
+  color: var(--star-color);
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.7);
+}
+
+.rating input:checked ~ label {
+  color: var(--star-color);
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.7);
+}
+
+
+.opiniones-container {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 2px solid var(--borde);
+}
+
+.opiniones-container h2 {
+  color: var(--naranja);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.opinion-item {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--borde);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.opinion-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.opinion-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.opinion-user {
+  font-weight: 600;
+  color: var(--naranja);
+  font-size: 1.1rem;
+}
+
+.opinion-rating {
+  display: flex;
+  gap: 2px;
+}
+
+.opinion-rating i.fas.fa-star {
+  color: var(--star-color);
+  text-shadow: 0 0 4px rgba(255, 215, 0, 0.5);
+}
+
+.opinion-rating i.far.fa-star {
+  color: #ddd;
+}
+
+.opinion-date {
+  color: #777;
+  font-size: 0.9rem;
+}
+
+.opinion-product {
+  font-style: italic;
+  color: #555;
+  margin: 0.5rem 0;
+  font-size: 0.95rem;
+}
+
+.opinion-text {
+  line-height: 1.6;
+  margin: 0;
+  color: var(--texto);
+}
+
+.no-opinions {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: #777;
+}
+
+.no-opinions i {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+/* Notificaciones */
+.opinion-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  color: white;
+  font-weight: 500;
+  z-index: 1000;
+  max-width: 350px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+}
+
+.opinion-notification.show {
+  transform: translateX(0);
+}
+
+.opinion-notification.success {
+  background-color: #4CAF50;
+}
+
+.opinion-notification.error {
+  background-color: #f44336;
+}
+
+.opinion-notification.info {
+  background-color: #2196F3;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.opinion-item {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Media queries */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+    padding: 1rem 0.5rem;
+  }
+
+  .logo-container {
+    justify-content: center;
+  }
+
+  .user-info {
+    margin-top: 0.5rem;
+  }
+
+  .container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+
+  .opinion-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .opinion-rating {
+    align-self: flex-start;
+  }
+
+  .login-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .rating {
+    justify-content: center;
+  }
+
+  .rating label {
+    font-size: 1.8rem;
+  }
+
+  .opinion-notification {
+    right: 10px;
+    left: 10px;
+    max-width: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    margin: 0.5rem;
+    padding: 1rem;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  .rating label {
+    font-size: 1.5rem;
+    padding: 0 0.05rem;
+  }
+
+  .opinion-item {
+    padding: 1rem;
+  }
+}
+
+img {
+  width: 100px;
+  height: 100px;
+}

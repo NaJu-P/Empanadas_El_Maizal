@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alerta Stock - Empanadas El Maizal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/alerta_stock.css') }}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥟</text></svg>">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="nav-container">
+            <nav class="nav-links">
+                <a href="{{ url_for('gestion_productos.index') }}" target="_self">Gestion Productos</a>
+            </nav>
+
+            <div class="logo-section">
+                <div class="brand-text">
+                    <h1>Empresa Empanadas El Maizal</h1>
+                    <p>Tradición y sabor en cada bocado</p>
+                </div>
+                <div class="logo">
+                    <a href="{{ url_for('admin.dashboard') }}">
+                        <img src="{{ url_for('static', filename='img/logo_tranparente.png') }}" class="logo" alt="Logo Empanadas El Maizal">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="content">
+            <!-- Controles adicionales -->
+            <div class="controls-section" style="margin-bottom: 20px;">
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <button id="refresh-data" class="btn btn-primary" style="background: #3498db; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;">
+                        🔄 Actualizar Datos
+                    </button>
+                    <input type="text" id="search-input" placeholder="Buscar productos..." style="padding: 8px; border: 1px solid #ddd; border-radius: 4px; width: 200px;">
+                </div>
+            </div>
+            
+            <!-- Resumen de stock -->
+            <div class="stock-summary">
+                <h2>Stock Actual de Empanadas</h2>
+                <div id="stock-summary-info">
+                    <div class="summary-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Total Productos:</span>
+                            <span class="stat-value" id="total-productos">{{ summary.total_productos if summary else 0 }}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Stock Bajo:</span>
+                            <span class="stat-value alert" id="stock-bajo">{{ summary.stock_bajo if summary else 0 }}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Disponibles:</span>
+                            <span class="stat-value success" id="disponibles">{{ summary.disponibles if summary else 0 }}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Stock Crítico:</span>
+                            <span class="stat-value critical" id="stock-critico">{{ summary.stock_critico if summary else 0 }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Alertas de stock bajo -->
+            {% if alertas and alertas|length > 0 %}
+            <div class="alert-banner" id="alert-banner">
+                <strong>⚠️ ALERTA DE STOCK:</strong> 
+                {% for alerta in alertas %}
+                    {{ alerta.nombre }} ({{ alerta.stock }} unidades)
+                    {% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <!-- Controles de exportación -->
+            <div class="export-buttons">
+                <button class="export-csv" style="background: #27ae60; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; margin-right: 10px;">
+                    📊 Exportar a CSV
+                </button>
+            </div>
+            
+            <!-- Tabla de stock -->
+            <div class="table-container">
+                <table id="stock-table">
+                    <thead>
+                        <tr>
+                            <th>Codigo</th>
+                            <th>Producto</th>
+                            <th>Descripción</th>
+                            <th>Stock</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="stock-table-body">
+                        {% if empanadas and empanadas|length > 0 %}
+                            {% for empanada in empanadas %}
+                            <tr class="{% if empanada.estado_clase == 'critico' %}critical-stock{% elif empanada.estado_clase == 'bajo' %}low-stock{% endif %}">
+                                <td>{{ empanada.id_producto }}</td>
+                                <td>{{ empanada.nombre }}</td>
+                                <td>{{ empanada.descripcion }}</td>
+                                <td class="stock-cell">{{ empanada.stock }}</td>
+                                <td class="status-cell {{ empanada.estado_clase }}">{{ empanada.estado }}</td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="5" class="empty-state">
+                                    <div class="empty-message">
+                                        <p>No hay productos en el inventario</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script para pasar datos al JavaScript -->
+    <script>
+        // Datos pasados desde Python para uso en JavaScript
+        window.stockData = {
+            empanadas: {{ empanadas|tojson|safe }},
+            summary: {{ summary|tojson|safe }},
+            alertas: {{ alertas|tojson|safe }}
+        };
+
+        const STOCK_BAJO_THRESHOLD = {{ config.STOCK_BAJO_THRESHOLD | default(10, true) }};
+        const STOCK_CRITICO_THRESHOLD = {{ config.STOCK_CRITICO_THRESHOLD | default(5, true) }};
+        
+        // Funcionalidad de búsqueda
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('search-input');
+            if (searchInput) {
+                searchInput.addEventListener('input', function(e) {
+                    if (window.stockManager) {
+                        window.stockManager.search(e.target.value);
+                    }
+                });
+            }
+        });
+    </script>
+    
+    <script src="{{ url_for('static', filename='js/alerta_stock.js') }}"></script>
+</body>
+</html>

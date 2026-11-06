@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>Opina sobre nuestras empanadas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/diseño.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥟</text></svg>">
+</head>
+<body>
+    <header>
+           <div class="logo-container">
+          <a href="{{ url_for('home') }}">
+           <img src="{{ url_for('static', filename='img/logo_tranparente.png') }}" alt="Logo de Empanadas El Maizal" class="logo" />
+              </a>
+            <span class="logo-text">Empanadas El Maizal</span>
+        </div>
+        <div class="user-info">
+            {% if session.get('user_id') %}
+                <span>Bienvenido, {{ nombre.nombres_usuario }}</span>
+            {% endif %}
+        </div>
+    </header>
+
+    <div class="container">
+        <h1><i class="fas fa-comment-alt"></i> Opiniones sobre nuestras empanadas</h1>
+        <p>¡Déjanos saber tu experiencia con nuestras deliciosas empanadas!</p>
+        
+        {% if session.get('user_id') %}
+            <!-- FORMULARIO COMPLETO PARA USUARIOS REGISTRADOS -->
+            <form id="opinionForm">
+                <div class="form-group">
+                    <input type="hidden" id="id_usuario_hidden" value="{{ session.get('user_id') }}">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" value="{{ session.get('user_email', '') }}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="tipo-empanada">Tipo de empanada probada:</label>
+                    <select id="producto-select" name="producto" required>
+                        <option value="">Selecciona una empanada...</option>
+                        {% for producto in productos %}
+                            <option value="{{ producto.id_producto }}">
+                                {{ loop.index }}. {{ producto.nombre_producto }} - ${{ producto.precio_producto }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="form-group" id="otra-sabor-container" style="display: none;">
+                    <label for="otra-sabor">Especifica otro sabor:</label>
+                    <input type="text" id="otra-sabor" name="otra-sabor">
+                </div>
+
+                <div class="form-group">
+                <label>Calificación:</label>
+                <div class="rating-wrapper">
+                 <div class="rating">
+                         {% for i in range(5, 0, -1) %}
+                <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}">
+                <label for="star{{ i }}"><i class="fas fa-star"></i></label>
+                         {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                <div class="form-group">
+                    <label for="comentario">Tu opinión:</label>
+                    <textarea id="comentario" name="comentario" rows="5" placeholder="Cuéntanos tu experiencia... (Tiene que ser mayor de 10 caracteres)" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="publicar" name="publicar" checked>
+                        <span>Autorizo publicar mi opinión en el sitio web</span>
+                    </label>
+                </div>
+
+                <button type="submit" class="submit-btn"><i class="fas fa-paper-plane"></i> Enviar opinión</button>
+            </form>
+
+            <div id="thankYouMessage" class="hidden" style="text-align: center; padding: 2rem;">
+                <h2><i class="fas fa-check-circle" style="color: #4CAF50;"></i> ¡Gracias por tu opinión!</h2>
+                <p>Tu comentario es muy valioso para nosotros. ¡Esperamos verte pronto de nuevo!</p>
+                <button id="newOpinionBtn" class="submit-btn">Dar otra opinión</button>
+            </div>
+
+        {% else %}
+            <!-- CUADRO DE INICIO DE SESIÓN PARA USUARIOS NO REGISTRADOS -->
+            <div class="login-required-overlay">
+                <div class="login-required-content">
+                    <i class="fas fa-lock" style="font-size: 3rem; color: #FF6B35; margin-bottom: 1rem;"></i>
+                    <h3>¡Inicia sesión para dejar tu opinión!</h3>
+                    <p>Para poder compartir tu experiencia con nuestras empanadas, necesitas tener una cuenta.</p>
+                    <div class="login-actions">
+                        <a href="{{ url_for('auth.login') }}" class="login-btn primary">
+                            <i class="fas fa-sign-in-alt"></i> Iniciar sesión
+                        </a>
+                    </div>
+                    <p class="small-text">¡Es rápido y gratuito!</p>
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- SECCIÓN DE OPINIONES EXISTENTES (VISIBLE PARA TODOS) -->
+        <div id="opinionesGuardadas" class="opiniones-container">
+            <h2><i class="fas fa-comments"></i> Opiniones de nuestros clientes</h2>
+            <div id="listaOpiniones">
+                {% if opiniones %}
+                    {% for opinion in opiniones %}
+                    <div class="opinion-item">
+                        <div class="opinion-header">
+                            <span class="opinion-user">{{ opinion.nombres_usuario }}</span>
+                            <span class="opinion-rating">
+                                {% for i in range(1, 6) %}
+                                    {% if i <= opinion.calificacion %}
+                                        <i class="fas fa-star"></i>
+                                    {% else %}
+                                        <i class="far fa-star"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </span>
+                            <span class="opinion-date">{{ opinion.fecha_creacion.strftime('%d/%m/%Y %H:%M') }}</span>
+                        </div>
+                        <p class="opinion-product"><strong>Probó:</strong> {{ opinion.nombre_producto }}</p>
+                        <p class="opinion-text">{{ opinion.descripcion_opinion }}</p>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-opinions">
+                        <i class="fas fa-comment-slash" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+                        <p>Aún no hay opiniones. ¡Sé el primero en compartir tu experiencia!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/logica.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprobante - Empanadas El Maizal</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/facturacion.css') }}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥟</text></svg>">
+</head>
+<body>
+    <header class="header">
+        <div class="nav-container">
+
+            <nav class="nav-links" id="navLinks">
+                <a href="{{ url_for('catalogo.catalogo') }}" target="_self">Catalogo</a>
+                <a href="{{ url_for('carrito.carrito') }}" target="_self">Carrito Compras</a>
+                <a href="../Tus-Comprobantes"_self">Tus Comprobantes</a>
+                <a href="../Opiniones"_self">Opiniones</a>
+                <a href="{{ url_for('sobre_nosotros') }}" target="_self">Sobre Nosotros</a>
+            </nav>
+
+            <div class="logo-section">
+                <div class="brand-text">
+                    <h1>Empresa Empanadas El Maizal</h1>
+                    <p>Tradición y sabor en cada bocado</p>
+                </div>
+                <div class="logo">
+                    <a href="{{ url_for('home') }}">
+                        <img src="{{ url_for('static', filename='img/logo_tranparente.png') }}" alt="Logo" 
+                        class="logo"
+                        onmouseover="this.style.cursor='pointer'" 
+                        onmouseout="this.style.cursor='default'">
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </header>
+
+    <div id="ripped-paper" class="ripped-paper">
+        <a href="{{ url_for('home') }}">
+        <img src="{{ url_for('static', filename='img/logo_tranparente.png') }}" alt="Logo" class="logo-factura">
+        </a>
+        <h1>ID DEL COMPROBANTE: #COM-{{productos.id_factura}}</h1>
+        <p><strong>Empresa:</strong> Empanadas El Maizal</p>
+        <p><strong>Dirección:</strong> Calle 123 #45-67, Bogotá D.C.</p>
+        <p><strong>Teléfono:</strong> (601) 234-5678</p>
+
+        <h1>INFORMACIÓN DE LA VENTA</h1>
+        <p><strong>Comprobante N°:</strong> COM-{{productos.id_factura}}</p>
+        <p><strong>Fecha:</strong> {{productos.fecha_compra}}</p>
+        <p><strong>Cliente:</strong> {{productos.nombres_usuario}} {{productos.apellidos_usuario}}</p>
+        <p><strong>Dirección:</strong> {{productos.direccion_usuario}}</p>
+        <p><strong>Correo:</strong> {{productos.email_usuario}}</p>
+        <p><strong>Teléfono:</strong> {{productos.telefono}}</p>
+        <p><strong>Metodo de Pago:</strong> {{productos.nombre_pago}}</p>
+
+        <h1>DETALLE DE PRODUCTOS</h1>
+        <table>
+        <thead>
+            <tr>
+            <th>Id Producto</th>
+            <th>Producto</th>
+            <th>Descripción</th>
+            <th>Cantidad</th>
+            <th>Valor Unitario</th>
+            <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% set ns = namespace(sub_total = 0) %}
+        {% for dato in datos %}
+            <tr>
+            <td>{{ dato.id_producto }}</td>
+            <td>{{ dato.nombre_producto }}</td>
+            <td>{{ dato.descripcion_producto }}</td>
+            <td>{{ dato.cantidad_producto }}</td>
+            <td>${{ dato.precio_producto }}</td>
+            <td>${{ dato.precio_producto * dato.cantidad_producto }}</td>
+            </tr>
+            {% set ns.sub_total = ns.sub_total + (dato.precio_producto * dato.cantidad_producto) %}
+        {% endfor %}
+        </tbody>
+        </table>
+        <div class="subtotal-section">
+        <h1>RESUMEN DE TOTALES</h1>
+        <p class="total-amount"><strong>TOTAL A PAGAR: ${{ ns.sub_total }}</strong></p>
+    </div>
+
+    </div>
+
+
+    <div class="download-section">
+        <button class="download-btn" onclick="generarPDF('ripped-paper')">
+            <i class="fas fa-download"></i>
+            Descargar pdf
+        </button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
+    <script src="{{ url_for('static', filename='js/descargar_pdf.js') }}"></script>
+</body>
+</html>

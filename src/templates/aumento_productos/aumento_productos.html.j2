@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Productos - Empanadas El Maizal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo_aumento.css') }}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥟</text></svg>">
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <nav class="nav-links">
+                <a href="{{ url_for('admin.admin_ventas') }}" target="_self">Analisis de Ventas</a>
+            </nav>
+
+            <div class="logo-section">
+                <div class="brand-text">
+                    <h1>Empresa Empanadas El Maizal</h1>
+                    <p>Tradición y sabor en cada bocado</p>
+                </div>
+                <div class="logo">
+                    <a href="{{ url_for('admin.dashboard') }}">
+                        <img src="{{ url_for('static', filename='img/logo_tranparente.png') }}" class="logo" style="width: 100px; height: 100px;" alt="Logo Empanadas El Maizal">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>🥟 Sistema de Gestión de Empanadas</h1>
+        
+        <div class="alert alert-success" id="successAlert" style="display: none;"></div>
+        <div class="alert alert-error" id="errorAlert" style="display: none;"></div>
+
+        <div class="add-product-section">
+            <h2>Agregar Nuevo Producto</h2>
+            <form class="add-form" id="addProductForm" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="productName">Nombre del Producto:</label>
+                    <input type="text" id="productName" name="productName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="productImageFile">Cargar Imagen:</label>
+                    <input type="file" id="productImageFile" name="productImageFile" 
+                           accept="image/*" required onchange="previewImage(event)">
+                    <input type="hidden" id="productImage" name="productImage">
+                </div>
+                
+                <div class="form-group">
+                    <div id="imagePreview" style="display: none; margin-top: 10px;">
+                        <img id="previewImg" src="" alt="Vista previa" 
+                             style="max-width: 200px; max-height: 200px; border: 1px solid #ddd; border-radius: 5px;">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="productPrice">Precio ($):</label>
+                    <input type="number" id="productPrice" name="productPrice" 
+                           min="0" step="0.01" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="initialQuantity">Cantidad Inicial:</label>
+                    <input type="number" id="initialQuantity" name="initialQuantity" 
+                           min="0" value="0" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="productDescription">Descripción:</label>
+                    <textarea id="productDescription" name="productDescription" 
+                              rows="3" required placeholder="Describe el producto..."></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-lg">Agregar Producto</button>
+            </form>
+        </div>
+
+        <div class="products-section">
+            <h2>Productos Disponibles</h2>
+            <div class="products-grid" id="productsGrid">
+                {% if productos %}
+                    {% for producto in productos %}
+                    <div class="product-card" data-id="{{ producto.id }}">
+                        <img src="{{ url_for('static', filename='img/' + producto.image) }}" 
+                             alt="{{ producto.name }}" 
+                             class="product-image"
+                             onerror="this.src='{{ url_for('static', filename='img/default-empanada.png') }}'">
+                        <div class="product-name">{{ producto.name }}</div>
+                        <div class="product-quantity">Stock: <span class="quantity-value">{{ producto.quantity }}</span></div>
+                        <div class="product-price">${{ "%.2f"|format(producto.price) }}</div>
+                        <div class="product-description">{{ producto.description }}</div>
+                        <div class="product-actions">
+                            <button class="btn btn-add btn-action" onclick="openModal('add', {{ producto.id }})"><i class="fa fa-plus"></i> Agregar</button>
+                            <button class="btn btn-edit btn-action" onclick="openModal('edit', {{ producto.id }})"><i class="fa fa-edit"></i> Modificar</button>
+                            <button class="btn btn-remove btn-action" onclick="openModal('remove', {{ producto.id }})"><i class="fa fa-minus"></i> Quitar</button>
+                            <button class="btn btn-delete btn-action" onclick="deleteProduct({{ producto.id }})"><i class="fa fa-trash"></i> Eliminar</button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No hay productos disponibles.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para operaciones -->
+    <div id="operationModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3 id="modalTitle">Operación</h3>
+            <input type="number" id="modalInput" placeholder="Ingrese cantidad" min="0">
+            <div class="modal-buttons">
+                <button class="btn btn-edit btn-action" id="modalConfirm"><i class="fa fa-check"></i> Confirmar</button>
+                <button class="btn btn-delete btn-action" id="modalCancel"><i class="fa fa-times"></i> Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pasar datos del servidor a JavaScript -->
+    <script>
+        // Datos del servidor disponibles en JavaScript
+        const productosData = {{ productos|tojson }};
+        
+        // Función para previsualizar la imagen
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('previewImg').src = e.target.result;
+                    document.getElementById('imagePreview').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+                
+                // Establecer el nombre del archivo en el campo oculto
+                document.getElementById('productImage').value = file.name;
+            }
+        }
+    </script>
+    <!-- Font Awesome para iconos bonitos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="{{ url_for('static', filename='js/aumento_productos.js') }}"></script>
+    <style>
+        .btn-volver {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+            color: white !important;
+            padding: 0.7rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border: none;
+            transition: all 0.3s;
+        }
+        .btn-volver:hover {
+            background: linear-gradient(135deg, #F7931E 0%, #FF6B35 100%);
+            color: #fff;
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.18);
+        }
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.10);
+        }
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+        .volver-text {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        .btn-lg {
+            font-size: 1.1rem;
+            padding: 0.8rem 2rem;
+            border-radius: 10px;
+        }
+        .btn-action {
+            min-width: 110px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .btn-action i {
+            font-size: 1.1em;
+        }
+    </style>
+</body>
+</html>

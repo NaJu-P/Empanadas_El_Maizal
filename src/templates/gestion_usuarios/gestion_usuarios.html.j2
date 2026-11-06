@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ titulo }} - Empanadas El Maizal</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥟</text></svg>">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/gestion_usuarios.css') }}">
+</head>
+<body>
+  <header>
+      <div class="nav-container">
+
+          <div class="logo-section">
+              <div class="brand-text">
+                  <h1>Empresa Empanadas El Maizal</h1>
+                  <p>Tradición y sabor en cada bocado</p>
+              </div>
+              <div class="logo">
+                  <a href="{{ url_for('admin.dashboard') }}">
+                      <img src="{{ url_for('static', filename='img/logo_tranparente.png') }}" class="logo" style="width: 100px; height: 100px;" alt="Logo Empanadas El Maizal">
+                  </a>
+              </div>
+          </div>
+      </div>
+  </header>
+
+  <main>
+    <!-- Mostrar mensajes flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <!-- SECCIÓN DE CLIENTES -->
+    <div>
+      <h2>Lista de Clientes</h2>
+      
+      {% if clientes %}
+        <table border="1" cellpadding="10" cellspacing="0">
+          <thead>
+            <tr>
+              <th>Nombres</th>
+              <th>Apellidos</th>
+              <th>Email</th>
+              <th>Teléfono</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for cliente in clientes %}
+            <tr>
+              <td>{{ cliente.nombres_usuario }}</td>
+              <td>{{ cliente.apellidos_usuario }}</td>
+              <td>{{ cliente.email_usuario }}</td>
+              <td>{{ cliente.telefono }}</td>
+              <td>
+                <button onclick="editarCliente({{ cliente.id_usuario }})" title="Editar">✏️</button>
+                <button onclick="confirmarEliminacionCliente({{ cliente.id_usuario }})" title="Eliminar">🗑️</button>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <!-- Paginación -->
+        {% if pagination.pages > 1 %}
+        <div style="margin-top: 20px; text-align: center;">
+          <p>Página {{ pagination.page }} de {{ pagination.pages }} ({{ pagination.total }} clientes total)</p>
+          
+          <div>
+            <!-- Página anterior -->
+            {% if pagination.page > 1 %}
+              <a href="{{ url_for('gestion_usuario.gestion_usuarios', page=pagination.page-1) }}" 
+                 style="margin: 0 5px; padding: 5px 10px; text-decoration: none; border: 1px solid #ccc;">
+                « Anterior
+              </a>
+            {% endif %}
+
+            <!-- Números de página -->
+            {% for page_num in range(1, pagination.pages + 1) %}
+              {% if page_num == pagination.page %}
+                <span style="margin: 0 5px; padding: 5px 10px; background: #007bff; color: white;">
+                  {{ page_num }}
+                </span>
+              {% else %}
+                <a href="{{ url_for('gestion_usuario.gestion_usuarios', page=page_num) }}" 
+                   style="margin: 0 5px; padding: 5px 10px; text-decoration: none; border: 1px solid #ccc;">
+                  {{ page_num }}
+                </a>
+              {% endif %}
+            {% endfor %}
+
+            <!-- Página siguiente -->
+            {% if pagination.page < pagination.pages %}
+              <a href="{{ url_for('gestion_usuario.gestion_usuarios', page=pagination.page+1) }}" 
+                 style="margin: 0 5px; padding: 5px 10px; text-decoration: none; border: 1px solid #ccc;">
+                Siguiente »
+              </a>
+            {% endif %}
+          </div>
+        </div>
+        {% endif %}
+
+      {% else %}
+        <p>No hay clientes registrados.</p>
+      {% endif %}
+    </div>
+
+    <!-- SECCIÓN DE DOMICILIARIOS -->
+    <div style="margin-top: 50px;">
+      <h2>Lista de Domiciliarios</h2>
+      
+      {% if domiciliarios %}
+        <table border="1" cellpadding="10" cellspacing="0">
+          <thead>
+            <tr>
+              <th>Nombres</th>
+              <th>Email</th>
+              <th>Teléfono</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for domiciliario in domiciliarios %}
+            <tr>
+              <td>{{ domiciliario.nombres_domiciliario }}</td>
+              <td>{{ domiciliario.email_domiciliario }}</td>
+              <td>{{ domiciliario.telefono }}</td>
+              <td>
+                <button onclick="editarDomiciliario({{ domiciliario.id_domiciliario }})" title="Editar">✏️</button>
+                <button onclick="confirmarEliminacionDomiciliario({{ domiciliario.id_domiciliario }})" title="Eliminar">🗑️</button>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+      {% else %}
+        <p>No hay domiciliarios registrados.</p>
+      {% endif %}
+    </div>
+
+    <!-- Modal para editar cliente -->
+    <div id="editModalCliente" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+      <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 5px; min-width: 400px;">
+        <h3>Editar Cliente</h3>
+        <form id="editFormCliente">
+          <div style="margin-bottom: 10px;">
+            <label>Nombres:</label>
+            <input type="text" id="edit_nombres" required style="width: 100%; padding: 5px;">
+          </div>
+          <div style="margin-bottom: 10px;">
+            <label>Apellidos:</label>
+            <input type="text" id="edit_apellidos" required style="width: 100%; padding: 5px;">
+          </div>
+          <div style="margin-bottom: 10px;">
+            <label>Email:</label>
+            <input type="email" id="edit_email" required style="width: 100%; padding: 5px;">
+          </div>
+          <div style="margin-bottom: 10px;">
+            <label>Teléfono:</label>
+            <input type="tel" id="edit_telefono" required style="width: 100%; padding: 5px;" pattern="[0-9]{10}" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+          </div>
+          <div style="text-align: right;">
+            <button type="button" onclick="cerrarModalCliente()" style="margin-right: 10px; padding: 5px 15px;">Cancelar</button>
+            <button type="submit" style="padding: 5px 15px; background: #007bff; color: white; border: none;">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal para editar domiciliario -->
+    <div id="editModalDomiciliario" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+      <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 5px; min-width: 400px;">
+        <h3>Editar Domiciliario</h3>
+        <form id="editFormDomiciliario">
+          <div style="margin-bottom: 10px;">
+            <label>Nombres:</label>
+            <input type="text" id="edit_nombres_domiciliario" required style="width: 100%; padding: 5px;">
+          </div>
+          <div style="margin-bottom: 10px;">
+            <label>Email:</label>
+            <input type="email" id="edit_email_domiciliario" required style="width: 100%; padding: 5px;">
+          </div>
+          <div style="margin-bottom: 10px;">
+            <label>Teléfono:</label>
+            <input type="tel" id="edit_telefono_domiciliario" required style="width: 100%; padding: 5px;" pattern="[0-9]{10}" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+          </div>
+          <div style="text-align: right;">
+            <button type="button" onclick="cerrarModalDomiciliario()" style="margin-right: 10px; padding: 5px 15px;">Cancelar</button>
+            <button type="submit" style="padding: 5px 15px; background: #007bff; color: white; border: none;">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </main>
+
+  <footer style="margin-top: 40px; text-align: center; padding: 20px; border-top: 1px solid #ccc;">
+    <h3>Empanadas El Maizal</h3>
+    <p>&copy; {{ now.year }} - Todos los derechos reservados</p>
+  </footer>
+  
+  <script src="{{ url_for('static', filename='js/gestion_usuarios.js') }}"></script>
+</body>
+</html>

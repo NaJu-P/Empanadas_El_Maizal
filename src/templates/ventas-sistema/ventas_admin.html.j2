@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte de Ventas - Empanadas El Maizal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ventas_admin.css') }}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥟</text></svg>">
+</head>
+
+<body>
+    <header class="header">
+        <div class="nav-container">
+            <nav class="nav-links">
+                <a href="{{ url_for('porcentaje_ventas.ventas_page') }}" target="_self">Analisis de Ventas</a>
+            </nav>
+
+            <div class="logo-section">
+                <div class="brand-text">
+                    <h1>Reporte de Ventas</h1>
+                    <p>Empanadas El Maizal</p>
+                </div>
+                <div class="logo">
+                    <a href="{{ url_for('admin.dashboard') }}">
+                        <img src="{{ url_for('static', filename='img/logo_tranparente.png') }}" alt="Logo Empanadas El Maizal" class="logo">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- Botón para volver al dashboard -->
+        <div class="back-button-container">
+            <a href="{{ url_for('admin.dashboard') }}" class="back-button">
+                <i class="fas fa-arrow-left"></i> Volver al Dashboard
+            </a>
+        </div>
+
+        <!-- Resumen de estadísticas -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Total Productos Vendidos</h3>
+                    <p class="stat-number">
+                        {% set total_vendido = ventas | sum(attribute='total_vendido') %}
+                        {{ "{:,}".format(total_vendido) }}
+                    </p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Ingresos Totales</h3>
+                    <p class="stat-number">
+                        {% set total_ingresos = ventas | sum(attribute='total_ingresos') %}
+                        ${{ "{:,.0f}".format(total_ingresos) }}
+                    </p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-box"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Productos Diferentes</h3>
+                    <p class="stat-number">{{ ventas | length }}</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Producto Más Vendido</h3>
+                    <p class="stat-number">
+                        {% if ventas %}
+                            {{ ventas[0].producto }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtros y búsqueda -->
+        <div class="filters-container">
+            <div class="filter-group">
+                <label for="search-product">Buscar Producto:</label>
+                <input type="text" id="search-product" placeholder="Ingresa el nombre del producto...">
+            </div>
+            
+            <div class="filter-group">
+                <label for="sort-by">Ordenar por:</label>
+                <select id="sort-by">
+                    <option value="total_vendido">Cantidad Vendida</option>
+                    <option value="total_ingresos">Ingresos</option>
+                    <option value="producto">Nombre del Producto</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="sort-order">Orden:</label>
+                <select id="sort-order">
+                    <option value="desc">Descendente</option>
+                    <option value="asc">Ascendente</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Tabla de ventas -->
+        <div class="table-container">
+            <h2>Reporte Detallado de Ventas</h2>
+            
+            {% if ventas %}
+                <div class="table-responsive">
+                    <table class="sales-table" id="sales-table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <i class="fas fa-utensils"></i>
+                                    Producto
+                                </th>
+                                <th>
+                                    <i class="fas fa-chart-bar"></i>
+                                    Cantidad Vendida
+                                </th>
+                                <th>
+                                    <i class="fas fa-dollar-sign"></i>
+                                    Ingresos Totales
+                                </th>
+                                <th>
+                                    <i class="fas fa-percentage"></i>
+                                    % del Total
+                                </th>
+                                <th>
+                                    <i class="fas fa-calculator"></i>
+                                    Precio Promedio
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for venta in ventas %}
+                                <tr class="table-row" data-producto="{{ venta.producto.lower() }}" data-vendido="{{ venta.total_vendido }}" data-ingresos="{{ venta.total_ingresos }}">
+                                    <td>
+                                        <div class="product-info">
+                                            <strong>{{ venta.producto }}</strong>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="quantity-info">
+                                            <span class="quantity-number">{{ "{:,}".format(venta.total_vendido) }}</span>
+                                            <span class="quantity-label">unidades</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="income-info">
+                                            <span class="income-amount">${{ "{:,.0f}".format(venta.total_ingresos) }}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="percentage-info">
+                                            {% set porcentaje = (venta.total_ingresos / (ventas | sum(attribute='total_ingresos')) * 100) %}
+                                            <span class="percentage-number">{{ "{:.1f}".format(porcentaje) }}%</span>
+                                            <div class="percentage-bar">
+                                                <div class="percentage-fill" style="width: {{ porcentaje }}%"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="price-info">
+                                            {% set precio_promedio = venta.total_ingresos / venta.total_vendido | float %}
+                                            <span class="price-amount">${{ "{:,.0f}".format(precio_promedio) }}</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="no-data">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>No hay datos de ventas disponibles</h3>
+                    <p>Aún no se han registrado ventas en el sistema.</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="action-buttons">
+            <button class="action-btn export-btn" onclick="exportToCSV()">
+                <i class="fas fa-download"></i> Exportar CSV
+            </button>
+            
+            <button class="action-btn refresh-btn" onclick="location.reload()">
+                <i class="fas fa-sync-alt"></i> Actualizar Datos
+            </button>
+        </div>
+    </div>
+
+    <footer>
+        <h3>Panel de Ventas</h3>
+        <p>© 2025 Empanadas El Maizal - Todos los derechos reservados</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+    <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+    <script src="{{ url_for('static', filename='js/ventas.js') }}"></script>
+</body>
+
+</html>

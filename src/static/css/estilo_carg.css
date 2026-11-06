@@ -1,0 +1,74 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #da2020;
+    font-family: Arial, Helvetica, sans-serif;
+}
+img{
+    width: 200px;
+    height: 200px;
+}
+.loader {
+    width: 60px;
+    height: 60px;
+    position: relative;
+}
+
+.loader::before,
+.loader::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    animation: pulsOut 1.8s ease-in-out infinite;
+    filter: drop-shadow(0 0 1rem rgba(247, 243, 6, 0.8));
+}
+
+.loader::before {
+    width: 100%;
+    height: 100%;
+    background-color: #dfa857;
+}
+
+.loader::after {
+    width: 78%;
+    height: 78%;
+    background-color: #ff9901;
+    top: 11%;
+    left: 11%;
+}
+
+@keyframes pulsOut {
+    0%, 100% {
+        transform: scale(0);
+    }
+    50% {
+        transform: scale(1);
+    }
+}
+
+.loading-text {
+    color: white;
+    margin-top: 20px;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.progress-bar {
+    width: 200px;
+    height: 4px;
+    background: #eb9e2c;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+.progress {
+    height: 100%;
+    background: #880707;
+    width: 0%;
+    transition: width 0.5s ease;
+}

@@ -1,0 +1,363 @@
+/* Reset y variables globales */
+
+:root {
+    --primary-color: #FF6B35;
+    --secondary-color: #F7931E;
+    --text-dark: #1f2937;
+    --text-light: #6b7280;
+    --white: #ffffff;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(to right, #FF6B35, #F7931E);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #1f2937;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* Mejoras en el header */
+
+.header {
+    background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+    padding: 1.2rem 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.brand-text {
+    text-align: right;
+}
+
+.brand-text h1 {
+    font-size: 1.8rem;
+    color: white;
+    margin-bottom: 0.3rem;
+}
+
+.brand-text p {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.logo {
+    width: 90px;
+    /* Aumentado de 70px */
+    height: 90px;
+    /* Aumentado de 70px */
+    background: white;
+    border-radius: 50%;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.05);
+}
+
+.logo-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+
+/* Mejoras en las tarjetas */
+
+.admin-container {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.admin-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    padding: 1rem;
+}
+
+.admin-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.5rem;
+    background: var(--white);
+    border-radius: 16px;
+    transition: var(--transition);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.admin-card:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 22px 44px rgba(0, 0, 0, 0.15);
+}
+
+.admin-card i {
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1rem;
+}
+
+.admin-card h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--text-dark);
+}
+
+.admin-card p {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    line-height: 1.4;
+    color: var(--text-light);
+}
+
+.admin-card button {
+    width: 100%;
+    padding: 0.8rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border: none;
+    color: var(--white);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.admin-card button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
+}
+
+
+/* User Icon and Dropdown */
+
+.relative {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+}
+
+#user-icon {
+    font-size: 2.5rem;
+    /* Aumentado de 1.8rem */
+    color: white;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    margin-right: 2rem;
+    /* Añadido margen a la derecha */
+}
+
+#user-icon:hover {
+    transform: scale(1.1);
+}
+
+
+/* Mejoras en el dropdown */
+
+#dropdown-menu {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0;
+    /* Cambiado de right a left */
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    min-width: 200px;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+}
+
+#dropdown-menu.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+#dropdown-menu a {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1rem 1.5rem;
+    color: #333;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+#dropdown-menu a:hover {
+    background: rgba(255, 107, 53, 0.1);
+    color: #FF6B35;
+}
+
+#dropdown-menu a i {
+    font-size: 1.1rem;
+}
+
+
+/* Agregar una flecha al dropdown */
+
+#dropdown-menu::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 16px;
+    /* Cambiado de right a left */
+    width: 16px;
+    height: 16px;
+    background: white;
+    transform: rotate(45deg);
+    box-shadow: -2px -2px 4px rgba(0, 0, 0, 0.05);
+}
+
+
+/* Footer */
+
+footer {
+    background: var(--white);
+    padding: 1.5rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+footer h3 {
+    font-size: 1.2rem;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+footer p {
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+
+/* Responsive Design */
+
+@media screen and (max-width: 1200px) {
+    .admin-options {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 1rem;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .nav-container {
+        flex-direction: column;
+        padding: 1rem;
+    }
+    .logo-section {
+        flex-direction: column;
+        text-align: center;
+    }
+    .brand-text {
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+    .admin-options {
+        grid-template-columns: 1fr;
+    }
+    #dropdown-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 200px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .brand-text h1 {
+        font-size: 1.5rem;
+    }
+    .brand-text p {
+        font-size: 0.9rem;
+    }
+    .admin-card {
+        margin: 0.5rem;
+        padding: 1rem;
+    }
+}
+
+
+/* Mejoras en la interactividad */
+
+.admin-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.admin-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.admin-card:active {
+    transform: translateY(0);
+}
+
+
+/* Animaciones suaves */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.admin-card {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+.admin-card:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.admin-card:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.admin-card:nth-child(4) {
+    animation-delay: 0.3s;
+}

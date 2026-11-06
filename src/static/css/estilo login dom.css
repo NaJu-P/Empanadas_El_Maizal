@@ -1,0 +1,311 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #FF6B35;
+    --secondary-color: #FFD23F;
+    --accent-color: #4ECDC4;
+    --dark-color: #2C3E50;
+    --light-color: #F8F9FA;
+    --success-color: #27AE60;
+    --error-color: #E74C3C;
+    --warning-color: #F39C12;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    --shadow-hover: 0 15px 40px rgba(0, 0, 0, 0.15);
+    --gradient: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+    --gradient-light: linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(247, 147, 30, 0.1) 100%);
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #ff914d 0%, #ffde58 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/* Header styles */
+header {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    z-index: 100;
+}
+
+header .logo img {
+    width: 200px;
+    height: auto;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
+    transition: all 0.3s ease;
+}
+
+header .logo img:hover {
+    transform: scale(1.05);
+}
+
+/* Formulario principal */
+.formulario {
+    background: white;
+    border-radius: 24px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    max-width: 450px;
+    width: 100%;
+    position: relative;
+    animation: slideIn 0.6s ease forwards;
+}
+
+.formulario::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: var(--gradient);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 32px;
+    color: var(--dark-color);
+    font-size: 32px;
+    font-weight: 700;
+    padding: 40px 40px 20px;
+    position: relative;
+}
+
+h1::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background: var(--gradient);
+    border-radius: 2px;
+}
+
+form {
+    padding: 0 40px 40px;
+}
+
+.campo {
+    margin-bottom: 24px;
+    position: relative;
+}
+
+.campo label {
+    display: block;
+    color: var(--dark-color);
+    font-weight: 500;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.icono {
+    position: absolute;
+    left: 16px;
+    top: 75%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 20px;
+    height: 20px;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+    color: #6C757D;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.campo.email input,
+.campo.codigo-unico input {
+    padding-left: 50px;
+}
+
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+    width: 100%;
+    padding: 16px 50px;
+    border: 2px solid #E9ECEF;
+    border-radius: 12px;
+    font-size: 16px;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="text"]:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+input[type="email"]:focus + .icono,
+input[type="text"]:focus + .icono {
+    opacity: 1;
+}
+
+/* Estilos para el campo de contraseña */
+.campo.password {
+    position: relative;
+}
+
+.input-icon {
+    position: absolute;
+    right: 16px;
+    top: 73%;
+    transform: translateY(-50%);
+    color: #6C757D;
+    font-size: 18px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    z-index: 10;
+}
+
+.input-icon:hover {
+    color: var(--primary-color);
+}
+
+.password-toggle {
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Botón de envío */
+input[type="submit"] {
+    width: 100%;
+    background: var(--gradient);
+    color: white;
+    border: none;
+    padding: 16px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+input[type="submit"]::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
+    transition: left 0.6s;
+}
+
+input[type="submit"]:hover::before {
+    left: 100%;
+}
+
+input[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+/* Mensaje de error */
+.error {
+    color: var(--error-color);
+    font-size: 12px;
+    margin-top: 6px;
+    display: none;
+    font-weight: 500;
+    animation: fadeIn 0.3s ease;
+}
+
+.error.show {
+    display: block;
+}
+
+/* Animaciones */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    body {
+        padding: 20px;
+    }
+    
+    header {
+        top: 10px;
+        right: 20px;
+    }
+    
+    header .logo img {
+        width: 150px;
+    }
+    
+    .formulario {
+        margin: 0;
+    }
+    
+    h1 {
+        font-size: 28px;
+        padding: 30px 30px 15px;
+    }
+    
+    form {
+        padding: 0 30px 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    header {
+        top: 10px;
+        right: 15px;
+    }
+    
+    header .logo img {
+        width: 120px;
+    }
+    
+    h1 {
+        font-size: 24px;
+        padding: 25px 25px 15px;
+    }
+    
+    form {
+        padding: 0 25px 25px;
+    }
+    
+    .campo {
+        margin-bottom: 20px;
+    }
+}

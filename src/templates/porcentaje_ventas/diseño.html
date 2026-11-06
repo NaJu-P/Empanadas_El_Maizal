@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Empanadas el Maizal - Ventas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/porcentaje_ventas.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥟</text></svg>">
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <nav class="nav-links">
+                <a href="{{ url_for('admin.admin_ventas') }}" target="_self">Analisis de Ventas</a>
+            </nav>
+
+            <div class="logo-section">
+                <div class="brand-text">
+                    <h1>Empresa Empanadas El Maizal</h1>
+                    <p>Tradición y sabor en cada bocado</p>
+                </div>
+                <div class="logo">
+                    <a href="{{ url_for('admin.dashboard') }}">
+                        <img src="{{ url_for('static', filename='img/logo_tranparente.png') }}" class="logo" alt="Logo Empanadas El Maizal">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="sales-container">
+        <h2>Análisis de Ventas</h2>
+        
+        <div class="time-period-selector">
+            <button class="time-btn" data-period="day">Día</button>
+            <button class="time-btn" data-period="week">Semana</button>
+            <button class="time-btn" data-period="month">Mes</button>
+            <button class="time-btn" data-period="year">Año</button>
+        </div>
+
+        <div class="highlight-section">
+            <h3>Producto más vendido</h3>
+            <div class="highlight-card">
+                <img src="{{ url_for('static', filename='img/empanada-de-carne-molida.webp') }}" alt="Empanada de Carne" id="top-product-img">
+                <div class="highlight-info">
+                    <h4 id="top-product-name">Empanada de Carne</h4>
+                    <p id="top-product-count">0 unidades</p>
+                    <p id="top-product-percentage">0% del total de ventas</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="charts-container">
+            <div class="chart-card">
+                <h3>Ventas por producto</h3>
+                <canvas id="barChart"></canvas>
+            </div>
+            
+            <div class="chart-card">
+                <h3>Distribución de ventas</h3>
+                <canvas id="pieChart"></canvas>
+            </div>
+        </div>
+
+        <div class="sales-table">
+            <h3>Detalle de ventas</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Porcentaje</th>
+                    </tr>
+                </thead>
+                <tbody id="sales-table-body">
+                    <!-- Datos se llenarán con JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Empanadas el Maizal. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/porcentaje_ventas.js') }}"></script>
+</body>
+</html>

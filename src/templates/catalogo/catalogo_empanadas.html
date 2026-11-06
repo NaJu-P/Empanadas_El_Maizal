@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Catalogo - Empanadas El Maizal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/catalo_empanadas.css') }}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥟</text></svg>">
+</head>
+<body>
+    <!-- Carrito optimizado -->
+    <div class="carrito">
+        <h2>
+            Carrito de Compras:
+            <a href="{{ url_for('carrito.carrito') }}">Ver Carrito</a>
+        </h2>
+    </div>
+
+    <!-- Contenedor de mensajes -->
+    <div id="message-container"></div>
+
+    <div id="empanadas-container" class="empanadas-container">
+        {% for producto in productos %}
+        <article class="product-item {% if producto.estado_stock == 'sin_stock' %}product-agotado{% elif producto.estado_stock == 'stock_bajo' %}stock-bajo{% endif %}" 
+                 data-id="{{ producto.id_producto }}" 
+                 data-price="{{ producto.precio_producto }}" 
+                 data-name="{{ producto.nombre_producto }}"
+                 data-stock="{{ producto.cantidad_disponible }}"
+                 data-estado="{{ producto.estado_stock }}">
+            <div style="padding: 1rem 1.25rem; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between;">
+                <div>
+                    <!-- Imagen optimizada -->
+                    <img fetchpriority="high" 
+                         src="{{ url_for('static', filename='img/' + producto.img_producto) }}" 
+                         alt="{{ producto.nombre_producto }}"
+                         width="200" height="100"
+                         style="object-fit: cover; border-radius: 0.75rem; max-height: 200px; width: 100%; height: 100px; margin-bottom: 1rem;" />
+                    
+                    <h1 style="font-size: 1.25rem; font-weight: 700; color: #1f2937; margin-bottom: 0.5rem;">{{ producto.nombre_producto }}</h1>
+                    
+                    <!-- Advertencia de stock bajo -->
+                    {% if producto.estado_stock == 'stock_bajo' %}
+                    <div class="stock-warning">
+                        ⚠️ ¡Últimas unidades! Solo quedan {{ producto.cantidad_disponible }}
+                    </div>
+                    {% endif %}
+                    
+                    <p style="margin-bottom: 0.25rem; color: #6b7280; font-weight: 600;">Descripción: {{ producto.descripcion_producto }}</p>
+                    <p style="font-size: 1.125rem; font-weight: 600; color: #d97706; margin-bottom: 0.75rem;">
+                        Precio: $<span class="price">{{ "%.0f"|format(producto.precio_producto) }}</span>
+                    </p>
+                    {% set color = '#dc2626' if producto.cantidad_disponible <= 10 else '#059669' %}
+                    <p style="margin-bottom: 0.75rem; font-weight: 500; color: {{ color }};">
+                        Disponible: 
+                        <span class="stock-display {% if producto.cantidad_disponible <= 10 %}cantidad-critica{% endif %}">
+                            {{ producto.cantidad_disponible }}
+                        </span> 
+                        unidades
+                    </p>
+                </div>
+                
+                <div>
+                    <div class="cart-controls" id="controls-{{ producto.id_producto }}" style="margin-bottom: 0.75rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; justify-content: flex-start;">
+                            <button class="quantity-btn bg-red-500" 
+                                    onclick="updateQuantity('{{ producto.id_producto }}', -1)"
+                                    {% if producto.estado_stock == 'sin_stock' %}disabled{% endif %}>-</button>
+                            <span class="quantity-display" id="quantity-{{ producto.id_producto }}" style="min-width: 2rem; text-align: center; font-weight: bold;">0</span>
+                            <button class="quantity-btn bg-green-500" 
+                                    onclick="updateQuantity('{{ producto.id_producto }}', 1)"
+                                    {% if producto.estado_stock == 'sin_stock' %}disabled{% endif %}>+</button>
+                            <button class="remove-btn" onclick="removeFromCart('{{ producto.id_producto }}')">🗑️ Eliminar</button>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-yellow add-to-cart-btn {% if producto.estado_stock == 'sin_stock' %}btn-disabled{% endif %}" 
+                            {% if producto.estado_stock == 'sin_stock' %}disabled{% endif %}>
+                        {% if producto.estado_stock == 'sin_stock' %}
+                            ❌ Agotado
+                        {% else %}
+                            🛒 Agregar al carrito
+                        {% endif %}
+                    </button>
+                </div>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

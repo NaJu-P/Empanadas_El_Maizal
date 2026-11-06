@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login2.css') }}" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥟</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+     <a href="{{ url_for('home') }}">
+        <img src="{{ url_for('static', filename='img/logo_tranparente.png') }}" alt="Logo de Empanadas El Maizal" class="logo" />
+    </a>
+
+    <div class="container">
+        <div class="left">
+            <div>
+                <h1>¡Regístrate Hoy!</h1>
+                <p>Válido solo para nuevos usuarios :)</p>
+            </div>
+        </div>
+
+        <div class="right">
+            <button class="button" onclick="abrirRegistro()">Registrarse</button>
+            <button class="button" onclick="abrirModal()">Ya tengo cuenta</button>
+            <a href="{{ url_for('auth.restablecer_contrasena') }}" class="text-link">¿Olvidaste la contraseña?</a>
+            <a href="{{ url_for('domiciliarios.login') }}" class="text-link">¿Eres Domiciliario? Ingrese aqui</a>
+
+        </div>
+    </div>
+
+    <div id="registroModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="cerrarRegistro()">&times;</span>
+            <h2>Registro</h2>
+            
+            <!-- Formulario de registro -->
+            <form id="registroForm" onsubmit="event.preventDefault(); registrarse();">
+                <input type="email" id="correo" name="email" placeholder="Correo Electrónico" required 
+                    maxlength="100" />
+                
+                <input type="text" id="nombre" name="nombre" placeholder="Primer nombre" required 
+                    maxlength="50" pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+" 
+                    title="Solo se permiten letras y espacios" />
+                
+                <input type="text" id="apellido" name="apellidos" placeholder="Primer apellido" required 
+                    maxlength="50" pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+" 
+                    title="Solo se permiten letras y espacios" />
+
+                <input type="text" id="direccion" name="direccion" placeholder="Dirección completa" required 
+                    maxlength="200" minlength="10" 
+                    title="Ingresa tu dirección completa (mínimo 10 caracteres)" />
+
+                <input type="hidden" id="ciudad" name="ciudad" placeholder="Ciudad" required 
+                    maxlength="100" minlength="2" pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+" 
+                    title="Solo se permiten letras y espacios" />
+                
+                <input type="tel" id="telefono" name="telefono" placeholder="Teléfono (10 dígitos)" required 
+                    pattern="[0-9]{10}" maxlength="10" 
+                    title="Debe contener exactamente 10 dígitos" />
+
+                <div style="position: relative;">
+                    <input type="password" id="password" name="password" placeholder="Contraseña" required 
+                    minlength="6" maxlength="128" />
+                    <i class="input-icon password-toggle fas fa-eye" onclick="togglePassword('password')"></i>
+                </div>
+                
+                <button type="submit" class="button">Registrarse</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de inicio de sesión -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="cerrarModal()">&times;</span>
+            <h2>Iniciar Sesión</h2>
+            <input type="email" id="usuario" placeholder="Correo Electrónico" required />
+            <div style="position: relative;">
+                <input type="password" id="passwordLogin" placeholder="Contraseña" required />
+                <i class="input-icon password-toggle fas fa-eye" onclick="togglePassword('passwordLogin')"></i>
+            </div>
+            <button class="button" onclick="iniciarSesion()">Ingresar</button>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/login2.js') }}"></script>
+</body>
+
+</html>

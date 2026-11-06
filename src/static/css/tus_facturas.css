@@ -1,0 +1,506 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #FF6B35;
+    --secondary-color: #FFD23F;
+    --accent-color: #4ECDC4;
+    --dark-color: #2C3E50;
+    --light-color: #F8F9FA;
+    --success-color: #27AE60;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    --shadow-hover: 0 15px 40px rgba(0, 0, 0, 0.15);
+    --gradient: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+    --gradient-light: linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(247, 147, 30, 0.1) 100%);
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to bottom, #ff914d, #ffde58);
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    overflow: hidden;
+    width: 100%;
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    position: relative;
+}
+
+.container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: var(--gradient);
+}
+
+.header {
+    background: var(--gradient);
+    padding: 16px 32px;
+    box-shadow: var(--shadow);
+    position: relative;
+    z-index: 100;
+    color: white;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    flex: 1;
+    align-items: center;
+}
+
+.nav-links a {
+    position: relative;
+    font-weight: 600;
+    color: white;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-radius: 25px;
+    white-space: nowrap;
+}
+
+.nav-links a:hover,
+.nav-links a:focus {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.2);
+    outline: none;
+    transform: translateY(-2px);
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #fff, #ffcc99);
+    transition: width 0.3s ease;
+    border-radius: 2px;
+}
+
+.nav-links a:hover::after,
+.nav-links a:focus::after {
+    width: 80%;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-text h1 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    text-align: right;
+}
+
+.brand-text p {
+    font-size: 14px;
+    opacity: 0.9;
+    text-align: right;
+}
+
+.logo {
+    width: 100px;
+    height: auto;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.05);
+}
+
+.nav-links {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.nav-links a:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.main-content {
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.page-title {
+    text-align: center;
+    color: var(--dark-color);
+    margin-bottom: 16px;
+}
+
+.page-title h1 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.page-title p {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 400;
+}
+
+.facturas-container {
+    background: white;
+    border-radius: 20px;
+    padding: 32px;
+    box-shadow: var(--shadow);
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.facturas-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.5s;
+}
+
+.facturas-container:hover::before {
+    left: 100%;
+}
+
+.facturas-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #E9ECEF;
+}
+
+.facturas-header i {
+    font-size: 28px;
+    color: var(--primary-color);
+    background: var(--gradient-light);
+    padding: 12px;
+    border-radius: 12px;
+}
+
+.facturas-header h2 {
+    color: var(--dark-color);
+    font-weight: 600;
+    font-size: 24px;
+}
+
+.facturas-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.facturas-table thead {
+    background: var(--gradient);
+    color: white;
+}
+
+.facturas-table th {
+    padding: 20px 16px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: none;
+}
+
+.facturas-table tbody tr {
+    background: white;
+    transition: all 0.3s ease;
+    border-bottom: 1px solid #E9ECEF;
+}
+
+.facturas-table tbody tr:nth-child(even) {
+    background: #F8F9FA;
+}
+
+.facturas-table tbody tr:hover {
+    background: var(--gradient-light);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 107, 53, 0.1);
+}
+
+.facturas-table td {
+    padding: 20px 16px;
+    font-weight: 400;
+    color: var(--dark-color);
+    border: none;
+    vertical-align: middle;
+}
+
+.id-badge {
+    background: var(--gradient);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    display: inline-block;
+    min-width: 80px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
+}
+
+.factura-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.factura-name {
+    font-weight: 600;
+    color: var(--dark-color);
+    font-size: 16px;
+}
+
+.factura-date {
+    color: #6C757D;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.factura-date i {
+    font-size: 12px;
+    color: var(--primary-color);
+}
+
+.action-button {
+    background: var(--gradient);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.action-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.action-button:hover::before {
+    left: 100%;
+}
+
+.action-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+}
+
+.action-button i {
+    transition: transform 0.3s ease;
+}
+
+.action-button:hover i {
+    transform: translateX(3px);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 40px;
+    color: #6C757D;
+}
+
+.empty-icon {
+    font-size: 80px;
+    margin-bottom: 24px;
+    opacity: 0.3;
+    color: var(--primary-color);
+}
+
+.empty-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--dark-color);
+}
+
+.empty-description {
+    font-size: 16px;
+    max-width: 400px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: slideIn 0.6s ease forwards;
+}
+
+.facturas-table tbody tr {
+    animation: slideIn 0.6s ease forwards;
+}
+
+@media (max-width: 768px) {
+    .header {
+        padding: 20px;
+    }
+    
+    .nav-links {
+        gap: 16px;
+    }
+    
+    .nav-links a {
+        padding: 6px 12px;
+        font-size: 14px;
+    }
+    
+    .brand-text h1 {
+        font-size: 18px;
+    }
+    
+    .brand-text p {
+        font-size: 12px;
+    }
+    
+    .logo {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .logo img {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .main-content {
+        padding: 20px;
+    }
+    
+    .page-title h1 {
+        font-size: 24px;
+    }
+    
+    .facturas-container {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    
+    .facturas-table th,
+    .facturas-table td {
+        padding: 12px 8px;
+        font-size: 14px;
+    }
+    
+    .facturas-table th:nth-child(1),
+    .facturas-table td:nth-child(1) {
+        display: none;
+    }
+    
+    .action-button {
+        padding: 8px 16px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-container {
+        flex-direction: column;
+        gap: 16px;
+    }
+    
+    .nav-links {
+        order: -1;
+        gap: 12px;
+    }
+    
+    .page-title h1 {
+        font-size: 20px;
+    }
+    
+    .facturas-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 12px;
+    }
+    
+    .facturas-header h2 {
+        font-size: 20px;
+    }
+}

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>Sobre nosotros - Empanadas El Maizal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nosotros.css') }}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥟</text></svg>">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="nav-container">
+
+                <nav class="nav-links" id="navLinks">
+                    {% if session.get('user_id') %}
+                        <a href="{{ url_for('catalogo.catalogo') }}" target="_self">Catalogo</a>
+                        <a href="{{ url_for('carrito.carrito') }}" target="_self">Carrito Compras</a>
+                        <a href="../Tus-Comprobantes"_self">Tus Comprobantes</a>
+                        <a href="../Opiniones"_self">Opiniones</a>
+                    {% else %}
+                        <a href="{{ url_for('auth.login') }}"_self">Inicie sesion</a>
+                        <a href="../Opiniones"_self">Opiniones</a>
+                    {% endif %}
+                </nav>
+
+                <div class="logo-section">
+                    <div class="brand-text">
+                        <h1>Empresa Empanadas El Maizal</h1>
+                        <p>Tradición y sabor en cada bocado</p>
+                    </div>
+                    <div class="logo">
+                        <a href="{{ url_for('home') }}">
+                            <img src="{{ url_for('static', filename='img/logo_tranparente.png') }}" alt="Logo" 
+                            class="logo"
+                            onmouseover="this.style.cursor='pointer'" 
+                            onmouseout="this.style.cursor='default'">
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="page-title">
+                <h1>Conoce Nuestra Historia</h1>
+                <p>Descubre la pasión y dedicación detrás de cada empanada</p>
+            </div>
+
+            <div class="cards-container">
+                <div class="info-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <h2>Nuestra Visión</h2>
+                    </div>
+                    <p>
+                        La visión de la empresa "Empanadas El Maizal" es llegar a ser reconocida como 
+                        la mejor empresa de ventas de empanadas nacionalmente por su eficiencia, 
+                        seguridad, confiabilidad y puntualidad. Buscamos ser líderes en el mercado 
+                        ofreciendo productos de la más alta calidad.
+                    </p>
+                </div>
+
+                <div class="info-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <h2>Nuestra Misión</h2>
+                    </div>
+                    <p>
+                        En Empanadas El Maizal, nuestra misión es deleitar a nuestros clientes con 
+                        empanadas irresistibles que superen sus expectativas. Nos comprometemos a 
+                        ofrecer productos de calidad excepcional mientras cultivamos un crecimiento 
+                        sostenible que beneficie a nuestra comunidad y a nuestro equipo. 
+                        ¡Juntos, saboreamos el éxito!
+                    </p>
+                </div>
+            </div>
+
+            <div class="social-section">
+                <div class="social-content">
+                    <div class="social-header">
+                        <i class="fas fa-share-alt"></i>
+                        <h2>Síguenos en Redes Sociales</h2>
+                    </div>
+                    
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/empanadaselmaizal0?igsh=MXBmOWRnYjI4MHNsaw==" target="_blank" class="social-link" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://www.tiktok.com/@empanadaselmaizal0?_t=ZS-8w3kQyS56xO&_r=1" target="_blank" class="social-link" title="TikTok">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                    </div>
+
+                    <p class="cta-text">¿Listo para disfrutar de nuestras deliciosas empanadas?</p>
+                    <button class="cta-button" onclick="window.location.href='../Home'">
+                        Hacer Pedido <i class="fas fa-shopping-cart"></i>
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/nosotros.js') }}"></script>
+</body>
+</html>

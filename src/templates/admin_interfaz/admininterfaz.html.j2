@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Panel Administrador - Empanadas El Maizal{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admininterfaz.css') }}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥟</text></svg>">
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+    <header class="header">
+        <div class="nav-container">
+            <nav class="nav-links">
+                <div class="relative">
+                    <i id="user-icon" class="fas fa-user-circle" aria-label="Menú de administrador"></i>
+                    <div id="dropdown-menu">
+                        <a href="#" id="logout-link">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                        </a>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="logo-section">
+                <div class="brand-text">
+                    <h1>Panel de Administración</h1>
+                    <p>Empanadas El Maizal</p>
+                </div>
+                <div class="logo">
+                    <a href="/admin/login">
+                        <img src="{{ url_for('static', filename='img/logo_transparente.png') }}" alt="Logo Empanadas El Maizal" class="logo">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    {% block content %}
+    <div class="admin-container">
+        <div class="admin-options">
+            <div class="admin-card">
+                <i class="fas fa-chart-bar"></i>
+                <h2>Gestión de Ventas</h2>
+                <p>Administra y monitorear las ventas, genera reportes y analiza el rendimiento del negocio.</p>
+                <button onclick="window.location.href='/admin/ventas'">
+                    <i class="fas fa-arrow-right"></i> Acceder al Panel
+                </button>
+            </div>
+
+            <div class="admin-card">
+                <i class="fas fa-box"></i>
+                <h2>Inventario</h2>
+                <p>Controla el stock de productos, gestiona materias primas y optimiza recursos.</p>
+                <button onclick="window.location.href='{{ url_for('alerta_stock.stock_empanadas') }}'">
+                    <i class="fas fa-arrow-right"></i> Acceder al Panel
+                </button>
+            </div>
+
+            <div class="admin-card">
+                <i class="fas fa-users"></i>
+                <h2>Gestión de Usuarios</h2>
+                <p>Administra usuarios, permisos y roles del sistema de manera eficiente.</p>
+                <button onclick="window.location.href='/admin/usuarios'">
+                    <i class="fas fa-arrow-right"></i> Acceder al Panel
+                </button>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+
+    <footer>
+        <h3>Panel Administrativo</h3>
+        <p>© 2025 Empanadas El Maizal - Todos los derechos reservados</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/admininterfaz.js') }}"></script>
+</body>
+</html>

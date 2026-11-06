@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restablecer Contraseña - Empanadas El Maizal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cambiar_contraseña.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥟</text></svg>">
+</head>
+<body>
+    <header class="header">
+        <div class="nav-container">
+            <nav class="nav-links" id="navLinks">
+                <a href="{{ url_for('auth.login') }}"_self">Inicie sesion</a>
+            </nav>
+
+            <div class="logo-section">
+                <div class="brand-text">
+                    <h1>Empresa Empanadas El Maizal</h1>
+                    <p>Tradición y sabor en cada bocado</p>
+                </div>
+                <div class="logo">
+                    <a href="{{ url_for('home') }}">
+                        <img src="{{ url_for('static', filename='img/logo_tranparente.png') }}" alt="Logo" 
+                        class="logo"
+                        onmouseover="this.style.cursor='pointer'" 
+                        onmouseout="this.style.cursor='default'">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="reset-container" id="resetContainer">
+            <div class="steps-container">
+                <div class="steps">
+                    <div class="step active" id="step1"></div>
+                    <div class="step" id="step2"></div>
+                </div>
+            </div>
+
+            <!-- Mostrar mensajes flash -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="flash-message flash-{{ category }}">
+                                <i class="fas fa-{{ 'check-circle' if category == 'success' else 'exclamation-triangle' }}"></i>
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <div class="reset-header">
+                <div class="reset-icon">
+                    <i class="fas fa-envelope" id="headerIcon"></i>
+                </div>
+                <h1 class="reset-title" id="resetTitle">Restablecer Contraseña</h1>
+                <p class="reset-subtitle" id="resetSubtitle">
+                    Te enviaremos un enlace a tu correo electrónico para que puedas restablecer tu contraseña de forma segura
+                </p>
+            </div>
+
+            <form class="reset-form" method="POST" action="{{ url_for('auth.restablecer_contrasena') }}" onsubmit="handleSubmit(event)">
+                <div class="form-group">
+                    <label class="form-label" for="email">Correo Electrónico</label>
+                    <div style="position: relative;">
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email"
+                            class="form-input" 
+                            placeholder="Ingresa tu correo electrónico"
+                            required
+                            onblur="validateEmail()"
+                        >
+                        <i class="input-icon fas fa-envelope"></i>
+                    </div>
+                    <div class="form-error" id="emailError"></div>
+                    <div class="form-help">
+                        <i class="fas fa-info-circle"></i>
+                        Ingresa el correo electrónico asociado a tu cuenta
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <i class="fas fa-paper-plane"></i> Enviar Enlace de Restablecimiento
+                </button>
+
+                <div class="additional-info">
+                    <div class="info-item">
+                        <i class="fas fa-clock"></i>
+                        <span>El enlace expirará en 1 hora por seguridad</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Revisa tu bandeja de entrada y spam</span>
+                    </div>
+                </div>
+
+                <div class="back-link">
+                    <a href="{{ url_for('auth.login_page') }}">
+                        <i class="fas fa-arrow-left"></i>
+                        Volver al inicio de sesión
+                    </a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        function validateEmail() {
+            const email = document.getElementById('email');
+            const emailError = document.getElementById('emailError');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            if (!emailRegex.test(email.value)) {
+                emailError.textContent = 'Por favor ingresa un correo electrónico válido';
+                email.classList.add('error');
+                return false;
+            } else {
+                emailError.textContent = '';
+                email.classList.remove('error');
+                return true;
+            }
+        }
+
+        function handleSubmit(event) {
+            if (!validateEmail()) {
+                event.preventDefault();
+                return false;
+            }
+            
+            // Cambiar el botón mientras se procesa
+            const submitBtn = document.getElementById('submitBtn');
+            const originalContent = submitBtn.innerHTML;
+            
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+            submitBtn.disabled = true;
+            
+            // Si hay algún error, restaurar el botón
+            setTimeout(() => {
+                if (submitBtn.disabled) {
+                    submitBtn.innerHTML = originalContent;
+                    submitBtn.disabled = false;
+                }
+            }, 10000);
+        }
+
+        // Agregar estilos para estados de error
+        const style = document.createElement('style');
+        style.textContent = `
+            .form-input.error {
+                border-color: #ef4444;
+                box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+            }
+            
+            .form-error {
+                color: #ef4444;
+                font-size: 0.875rem;
+                margin-top: 0.5rem;
+                display: block;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

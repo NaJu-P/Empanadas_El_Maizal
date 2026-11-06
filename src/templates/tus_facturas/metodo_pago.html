@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metodo de pago - Empanadas El Maizal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/metodo_pago.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥟</text></svg>">
+    
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+</head>
+<body>
+<div class="container" id="paymentContainer">
+        <header class="header">
+            <div class="nav-container">
+
+                <nav class="nav-links" id="navLinks">
+                    <a href="{{ url_for('catalogo.catalogo') }}" target="_self">Catalogo</a>
+                    <a href="{{ url_for('carrito.carrito') }}" target="_self">Carrito Compras</a>
+                    <a href="../Tus-Comprobantes"_self">Tus Comprobantes</a>
+                    <a href="../Opiniones"_self">Opiniones</a>
+                    <a href="{{ url_for('sobre_nosotros') }}" target="_self">Sobre Nosotros</a>
+                </nav>
+
+                <div class="logo-section">
+                    <div class="brand-text">
+                        <h1>Empresa Empanadas El Maizal</h1>
+                        <p>Tradición y sabor en cada bocado</p>
+                    </div>
+                    <div class="logo">
+                        <a href="{{ url_for('home') }}">
+                            <img src="{{ url_for('static', filename='img/logo_tranparente.png') }}" alt="Logo" 
+                            class="logo"
+                            onmouseover="this.style.cursor='pointer'" 
+                            onmouseout="this.style.cursor='default'">
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </header>
+
+        <div class="order-summary">
+
+            <div class="order-items">
+                <div class="summary-header">
+                    <h2>Resumen del Pedido</h2>
+                </div>
+                {% set ns = namespace(sub_total = 0) %}
+                {% set cantidad = namespace(cantidad_1 = 0)%}
+                {% for producto in productos %}
+                <div class="item">
+                    <div class="item-info">
+                        <div class="item-icon">
+                            <img src="{{ url_for('static', filename='img/' ~ producto.img_producto) }}"/>
+                        </div>
+                        <div class="item-details">
+                            <h4>{{producto.nombre_producto}}</h4>
+                            <p>{{producto.descripcion_producto}}</p>
+                        </div>
+                    </div>
+                    <div class="item-price">${{producto.precio_producto * producto.cantidad_producto}}</div>
+                </div>
+                {% set ns.sub_total = ns.sub_total + (producto.precio_producto * producto.cantidad_producto) %}
+                {% set cantidad.cantidad_1 = cantidad.cantidad_1 + producto.cantidad_producto %}
+                {% endfor %}
+
+                <button class="pay-button" onclick="window.location.href='../Carrito'">
+                    Editar el Carrito
+                </button>
+            </div>
+
+            <div class="total-section">
+                <div class="total-row">
+                    <span>Cantidad:</span>
+                    <span>{{ cantidad.cantidad_1 }} empanadas</span>
+                </div>
+                <div class="total-final">
+                    <div class="total-row">
+                        <span>Total a pagar:</span>
+                        <span>${{ ns.sub_total }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="payment-section">
+            <div class="payment-header">
+                <h2>¿Cómo Prefieres Pagar?</h2>
+                <p>Después de realizar la transferencia, selecciona el tipo de pago (Nequi o Daviplata) y haz clic en el botón correspondiente que indica "Ya realicé el pago con Nequi" o "Ya realicé el pago con Daviplata".</p>
+            </div>
+
+            <div class="payment-methods">
+                <div class="payment-option" data-method="nequi">
+                    <img src="{{ url_for('static', filename='img/Nequi.png') }}" class="payment-icon" alt="" onmouseover="this.style.cursor='pointer'" onmouseout="this.style.cursor='default'">
+                    <div class="payment-desc">Pago rápido y seguro</div>
+                    <div class="payment-name estilo">QR de Nequi:</div>
+                    <div id="reader" style="width: 300px;"></div>
+                    <div class="codigo">
+                        <img src="{{ url_for('static', filename='img/qr_nequi.jpeg') }}" alt="">
+                    </div>
+                </div>
+
+                <div class="payment-option" data-method="daviplata">
+                    <img src="{{ url_for('static', filename='img/Daviplata.png') }}" class="payment-icon" alt="" onmouseover="this.style.cursor='pointer'" onmouseout="this.style.cursor='default'">
+                    <div class="payment-desc">Transferencia inmediata</div>
+                    <div class="payment-name estilo">QR de Davidplata:</div>
+                    <div class="codigo">
+                        <img src="{{ url_for('static', filename='img/qr_nequi.jpeg') }}" alt="">
+                    </div>
+                </div>
+            </div>
+
+            <button class="pay-button" onclick="processPayment()" id="payButton" disabled>
+                Selecciona un método de pago
+            </button>
+        </div>
+
+    </div>
+    
+</div>
+
+<script src="{{ url_for('static', filename='js/metodo_pago.js') }}"></script>
+
+</body>
+</html>

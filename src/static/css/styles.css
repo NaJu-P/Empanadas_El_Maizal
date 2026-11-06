@@ -1,0 +1,772 @@
+/* Reset y variables */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-orange: #FF6B35;
+    --secondary-orange: #F7931E;
+    --dark-gray: #1f2937;
+    --medium-gray: #2c3e50;
+    --dark-blue: #34495e;
+    --light-gray: #f8f9fa;
+    --white: #ffffff;
+    --green-primary: #27AE60;
+    --green-secondary: #2ECC71;
+    --red-primary: #e74c3c;
+    --red-secondary: #c0392b;
+    --blue-primary: #2980b9;
+    --purple-primary: #8e44ad;
+    --turquoise: #16a085;
+    --orange-accent: #e67e22;
+    --gray-accent: #7f8c8d;
+    --gray-light: #666;
+    --shadow-light: rgba(0, 0, 0, 0.1);
+    --shadow-medium: rgba(0, 0, 0, 0.15);
+    --shadow-dark: rgba(0, 0, 0, 0.2);
+    --border-radius: 8px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Animaciones personalizadas */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes shimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+@keyframes glow {
+    from { box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3); }
+    to { box-shadow: 0 6px 20px rgba(39, 174, 96, 0.5); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Body y layout principal */
+body {
+    background: linear-gradient(135deg, #ff914d 0%, #ffde58 100%);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--dark-gray);
+    overflow-x: hidden;
+    min-height: 100vh;
+    line-height: 1.6;
+    font-size: 18px;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 60%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Header mejorado */
+.header {
+    background: linear-gradient(135deg, var(--primary-orange) 0%, var(--secondary-orange) 100%);
+    box-shadow: 0 8px 32px var(--shadow-medium);
+    padding: 1.5rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
+    pointer-events: none;
+}
+
+.logo {
+    width: 100px;
+    height: auto;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    color: white;
+}
+
+.logo:hover {
+    transform: scale(1.05);
+}
+
+.nav-container {
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    flex: 1;
+    align-items: center;
+}
+
+.nav-links img{
+  width: 100px;
+  height: 100px;
+  float: left;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.nav-links img:hover{
+    transform: scale(1.05);
+} 
+
+.nav-links a {
+    position: relative;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: white;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-radius: 25px;
+    white-space: nowrap;
+}
+
+.nav-links a:hover,
+.nav-links a:focus {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.2);
+    outline: none;
+    transform: translateY(-2px);
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #fff, #ffcc99);
+    transition: width 0.3s ease;
+    border-radius: 2px;
+}
+
+.nav-links a:hover::after,
+.nav-links a:focus::after {
+    width: 80%;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-shrink: 0;
+}
+
+.logo-section h1 {
+    color: var(--white);
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 10px var(--shadow-medium);
+    animation: fadeInUp 1s ease-out;
+}
+
+.logo-section p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.1rem;
+    font-style: italic;
+    text-shadow: 0 1px 5px var(--shadow-light);
+    animation: fadeInUp 1s ease-out 0.2s both;
+}
+
+.brand-text {
+    text-align: left;
+}
+
+.brand-text h1 {
+    font-size: 21px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 0.25rem;
+    white-space: nowrap;
+}
+
+.brand-text p {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-style: italic;
+    white-space: nowrap;
+    text-align: right;
+}
+
+.logo {
+    transition: transform 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.05);
+}
+
+.logo img {
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+/* Container principal */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    position: relative;
+    z-index: 2;
+}
+
+.container > h1 {
+    text-align: center;
+    color: var(--white);
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-shadow: 0 4px 15px var(--shadow-medium);
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.container > h1 i {
+    margin-right: 1rem;
+    animation: bounce 2s infinite;
+}
+
+/* Alertas mejoradas */
+.alert {
+    padding: 1rem 1.5rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 1.5rem;
+    border: none;
+    box-shadow: 0 4px 15px var(--shadow-light);
+    animation: slideInLeft 0.5s ease-out;
+    backdrop-filter: blur(10px);
+}
+
+.alert-success {
+    background: linear-gradient(135deg, var(--green-primary), var(--green-secondary));
+    color: var(--white);
+}
+
+.alert-error {
+    background: linear-gradient(135deg, var(--red-primary), var(--red-secondary));
+    color: var(--white);
+}
+
+.alert-warning {
+    background: linear-gradient(135deg, var(--secondary-orange), var(--orange-accent));
+    color: var(--white);
+}
+
+/* Cards de pedidos mejoradas */
+.pedido-card {
+    background: var(--white);
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 40px var(--shadow-medium);
+    transition: var(--transition);
+    animation: fadeInUp 0.6s ease-out;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 107, 53, 0.1);
+    font-size: 18px;
+}
+
+.pedido-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-orange), var(--secondary-orange));
+}
+
+.pedido-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 60px var(--shadow-dark);
+}
+
+.pedido-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid rgba(255, 107, 53, 0.1);
+}
+
+.pedido-header h3 {
+    color: var(--red-primary);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.pedido-header h3 i {
+    margin-right: 0.5rem;
+    animation: pulse 2s infinite;
+}
+
+.pedido-header p {
+    color: var(--dark-blue);
+    font-size: 1.1rem;
+    font-weight: 500;
+    opacity: 0.8;
+}
+
+.pedido-header span {
+    background: linear-gradient(135deg, var(--green-primary), var(--green-secondary));
+    color: var(--white);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 1rem;
+    box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    animation: glow 2s infinite alternate;
+}
+
+/* Información del pedido */
+.pedido-info {
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.cliente-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.05), rgba(247, 147, 30, 0.05));
+    border-radius: var(--border-radius);
+    border-left: 4px solid var(--primary-orange);
+    transition: var(--transition);
+}
+
+.cliente-info:hover {
+    background: rgba(255, 107, 53, 0.1);
+    transform: translateX(5px);
+}
+
+.info-group h4 {
+    color: var(--purple-primary);
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.info-group h4 i {
+    color: var(--orange-accent);
+    animation: pulse 2s infinite;
+}
+
+.info-group p {
+    margin-bottom: 0.5rem;
+    color: var(--medium-gray);
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.info-group p strong {
+    color: var(--primary-orange);
+    font-weight: 600;
+}
+
+.info-group span {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 1rem;
+    color: var(--medium-gray);
+    background: rgba(255, 255, 255, 0.7);
+    padding: 0.5rem 1rem;
+    border-radius: 15px;
+    transition: var(--transition);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.info-group span:hover {
+    background: rgba(255, 107, 53, 0.1);
+    transform: scale(1.05);
+}
+
+.info-group span i {
+    color: var(--orange-accent);
+    font-size: 1.1rem;
+}
+
+/* Tabla de productos mejorada */
+.tabla-productos {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+    background: var(--white);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: 0 4px 15px var(--shadow-light);
+}
+
+.tabla-productos th {
+    background: linear-gradient(135deg, var(--red-secondary), var(--red-primary));
+    color: var(--white);
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 1rem;
+}
+
+.tabla-productos td {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 107, 53, 0.1);
+    color: var(--dark-gray);
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.tabla-productos tr:hover {
+    background: rgba(255, 107, 53, 0.05);
+    transform: translateX(5px);
+    transition: var(--transition);
+}
+
+.tabla-productos tr:last-child td {
+    border-bottom: none;
+}
+
+.producto-nombre {
+    font-weight: 600;
+    color: var(--blue-primary);
+    margin-bottom: 0.3rem;
+    font-size: 1.1rem;
+}
+
+.producto-cantidad {
+    font-size: 1rem;
+    color: var(--gray-accent);
+    font-weight: 500;
+}
+
+.producto-precio {
+    font-weight: 700;
+    color: var(--green-primary);
+    font-size: 1.2rem;
+    background: linear-gradient(135deg, var(--green-primary), var(--green-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 3s infinite;
+}
+
+/* Total del pedido */
+.total-pedido {
+    text-align: right;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(39, 174, 96, 0.1), rgba(46, 204, 113, 0.1));
+    border-radius: var(--border-radius);
+    border: 2px solid rgba(39, 174, 96, 0.2);
+}
+
+.total-pedido h3 {
+    color: var(--green-primary);
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-shadow: 0 2px 10px var(--shadow-light);
+    background: linear-gradient(135deg, var(--green-primary), var(--green-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 3s infinite;
+}
+
+/* Botón de entregado mejorado */
+.btn-entregado {
+    background: linear-gradient(135deg, var(--primary-orange), var(--secondary-orange));
+    color: var(--white);
+    padding: 1.2rem 2.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 8px 25px rgba(255, 107, 53, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-entregado::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: var(--transition);
+}
+
+.btn-entregado:hover::before {
+    left: 100%;
+}
+
+.btn-entregado:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(255, 107, 53, 0.4);
+    background: linear-gradient(135deg, var(--secondary-orange), var(--primary-orange));
+}
+
+.btn-entregado:active {
+    transform: translateY(-1px);
+}
+
+.btn-entregado i {
+    margin-right: 0.5rem;
+    animation: pulse 2s infinite;
+}
+
+/* Alineación del botón a la derecha */
+.pedido-info > div:last-child {
+    text-align: right;
+    margin-top: 2rem;
+}
+
+/* Estado sin pedidos */
+.no-pedidos {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: var(--white);
+    border-radius: 8px;
+    box-shadow: 0 10px 40px var(--shadow-medium);
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.no-pedidos i {
+    font-size: 4rem;
+    color: var(--primary-orange);
+    margin-bottom: 1rem;
+    animation: bounce 2s infinite;
+}
+
+.no-pedidos h2 {
+    color: var(--red-primary);
+    margin-bottom: 1rem;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.no-pedidos p {
+    color: var(--dark-blue);
+    opacity: 0.8;
+    font-size: 1.3rem;
+    font-weight: 500;
+}
+
+/* Información de entrega */
+.entrega-info {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(39, 174, 96, 0.1), rgba(46, 204, 113, 0.1));
+    border-radius: 15px;
+    border: 1px solid rgba(39, 174, 96, 0.2);
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.entrega-info span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--turquoise);
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.entrega-info i {
+    animation: spin 4s linear infinite;
+}
+
+/* Efectos de hover adicionales */
+.pedido-card:hover .pedido-header h3 {
+    color: var(--secondary-orange);
+}
+
+.pedido-card:hover .info-group h4 {
+    color: var(--secondary-orange);
+}
+
+.pedido-card:hover .total-pedido h3 {
+    color: var(--secondary-orange);
+}
+
+/* Responsividad mejorada */
+@media (max-width: 768px) {
+    .nav-container {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 0 1rem;
+    }
+    
+    .nav-links {
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+    }
+    
+    .nav-links img {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .logo-section h1 {
+        font-size: 2rem;
+    }
+    
+    .container {
+        padding: 1rem;
+    }
+    
+    .cliente-info {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .pedido-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .total-pedido {
+        text-align: center;
+    }
+    
+    .tabla-productos {
+        font-size: 0.85rem;
+    }
+    
+    .tabla-productos th,
+    .tabla-productos td {
+        padding: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container > h1 {
+        font-size: 2rem;
+    }
+    
+    .pedido-card {
+        padding: 1rem;
+    }
+    
+    .btn-entregado {
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+    }
+    
+    .pedido-info > div:last-child {
+        text-align: center;
+    }
+}
+
+/* Animaciones de entrada escalonadas */
+.pedido-card:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.pedido-card:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.pedido-card:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.pedido-card:nth-child(4) {
+    animation-delay: 0.3s;
+}
+
+.pedido-card:nth-child(5) {
+    animation-delay: 0.4s;
+}

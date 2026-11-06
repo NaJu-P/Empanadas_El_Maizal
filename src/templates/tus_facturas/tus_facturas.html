@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tus Comprobantes - Empanadas El Maizal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tus_facturas.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥟</text></svg>">
+</head>
+<body>
+    <div class="container fade-in">
+        <header class="header">
+            <div class="nav-container">
+                <nav class="nav-links">
+                    <a href="{{ url_for('catalogo.catalogo') }}" target="_self">Catalogo</a>
+                    <a href="{{ url_for('carrito.carrito') }}" target="_self">Carrito Compras</a>
+                    <a href="../Opiniones"_self">Opiniones</a>
+                    <a href="{{ url_for('sobre_nosotros') }}" target="_self">Sobre Nosotros</a>
+                </nav>
+
+                <div class="logo-section">
+                    <div class="brand-text">
+                        <h1>Empresa Empanadas El Maizal</h1>
+                        <p>Tradición y sabor en cada bocado</p>
+                    </div>
+                    <div class="logo">
+                        <a href="{{ url_for('home') }}">
+                            <img src="{{ url_for('static', filename='img/logo_tranparente.png') }}" class="logo" alt="Logo Empanadas El Maizal">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="page-title">
+                <h1>Tus Comprobantes</h1>
+                <p>Aquí puedes consultar y descargar todas tus Comprobantes de compra</p>
+            </div>
+
+            <div class="facturas-container">
+                <div class="facturas-header">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <h2>Historial de Compras</h2>
+                </div>
+
+                {% if productos and productos|length > 0 %}
+                <table class="facturas-table">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-hashtag"></i> ID Comprobante</th>
+                            <th><i class="fas fa-receipt"></i> Información de Comprobante</th>
+                            <th><i class="fas fa-cogs"></i> Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for producto in productos %}
+                        <tr style="animation-delay: 0.3s;">
+                            <td>
+                                <span class="id-badge">#{{ producto.id_factura }}</span>
+                            </td>
+                            <td>
+                                <div class="factura-info">
+                                    <div class="factura-name">Comprobante {{ loop.revindex }}</div>
+                                    <div class="factura-date">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        {{ producto.fecha_compra }}
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <a href="{{ url_for('Comprobante.comprobante', id_factura=producto.id_factura) }}" class="action-button">
+                                    <i class="fas fa-eye"></i>
+                                    Ver Detalles
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-receipt"></i>
+                    </div>
+                    <h3 class="empty-title">No tienes Comprobantes aún</h3>
+                    <p class="empty-description">
+                        Cuando realices tu primera compra de nuestras deliciosas empanadas, 
+                        tus facturas aparecerán aquí para que puedas consultarlas cuando gustes.
+                    </p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/tus_facturas.js') }}"></script>
+</body>
+</html>
